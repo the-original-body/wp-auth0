@@ -90,6 +90,8 @@ final class Sync extends Base
                 if (! is_array($exists) || [] === $exists) {
                     $dbConnectionName = $this->getDatabaseName($dbConnection);
 
+                    $userMetadata = apply_filters('auth0_sync_user_metadata', [], $user, 'create');
+
                     $response = $this->getSdk()->management()->users()->create($dbConnectionName, [
                         'name' => $user->display_name,
                         'nickname' => $user->nickname,
@@ -97,6 +99,7 @@ final class Sync extends Base
                         'family_name' => $user->user_lastname,
                         'email' => $user->user_email,
                         'password' => wp_generate_password(random_int(12, 123), true, true),
+                        'user_metadata' => $userMetadata,
                     ]);
 
                     $response = $this->getResults($response, 201);
@@ -168,12 +171,15 @@ final class Sync extends Base
 
                         $currentEmail = $api['email'] ?? '';
 
+                        $userMetadata = apply_filters('auth0_sync_user_metadata', [], $user, 'update');
+
                         $this->getSdk()->management()->users()->update($connectionId, [
                             'name' => $user->display_name,
                             'nickname' => $user->nickname,
                             'given_name' => $user->user_firstname,
                             'family_name' => $user->user_lastname,
                             'email' => $user->user_email,
+                            'user_metadata' => $userMetadata,
                         ]);
 
                         if ($user->user_email !== $currentEmail) {
@@ -187,12 +193,6 @@ final class Sync extends Base
 
     public function getDatabaseName(?string $dbConnection): ?string
     {
-        static $dbConnectionName = [];
-
-        if (isset($dbConnectionName[$dbConnection])) {
-            return $dbConnectionName[$dbConnectionName];
-        }
-
         if (null !== $dbConnection) {
             $response = $this->getResults($this->getSdk()->management()->connections()->get($dbConnection));
 
