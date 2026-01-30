@@ -1,0 +1,120 @@
+{
+    "name": "buggregator/trap",
+    "description": "A simple and powerful tool for debugging PHP applications.",
+    "license": "BSD-3-Clause",
+    "type": "library",
+    "keywords": [
+        "debug",
+        "cli",
+        "console",
+        "sentry",
+        "smtp",
+        "dump",
+        "binary dump",
+        "websockets",
+        "server",
+        "helper",
+        "dev",
+        "fibers",
+        "dumper"
+    ],
+    "authors": [
+        {
+            "name": "Aleksei Gagarin (roxblnfk)",
+            "homepage": "https://github.com/roxblnfk"
+        },
+        {
+            "name": "Pavel Buchnev (butschster)",
+            "homepage": "https://github.com/butschster"
+        }
+    ],
+    "homepage": "https://buggregator.dev/",
+    "funding": [
+        {
+            "type": "boosty",
+            "url": "https://boosty.to/roxblnfk"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "php-64bit": "*",
+        "ext-filter": "*",
+        "ext-sockets": "*",
+        "clue/stream-filter": "^1.6",
+        "internal/destroy": "^1.0",
+        "nyholm/psr7": "^1.8",
+        "php-http/message": "^1.15",
+        "psr/container": "^1.1 || ^2.0",
+        "psr/http-message": "^1.1 || ^2",
+        "symfony/console": "^6.4 || ^7 || ^8",
+        "symfony/var-dumper": "^6.3 || ^7 || ^8",
+        "yiisoft/injector": "^1.2"
+    },
+    "require-dev": {
+        "dereuromark/composer-prefer-lowest": "^0.1.10",
+        "ergebnis/phpunit-slow-test-detector": "^2.14",
+        "google/protobuf": "^3.25 || ^4.30",
+        "phpunit/phpunit": "^10.5.10",
+        "rector/rector": "^1.1",
+        "roxblnfk/unpoly": "^1.8.1",
+        "spiral/code-style": "^2.2.2",
+        "ta-tikoma/phpunit-architecture-test": "^0.8.5",
+        "vimeo/psalm": "^6.5"
+    },
+    "suggest": {
+        "ext-simplexml": "To load trap.xml",
+        "roxblnfk/unpoly": "If you want to remove unnecessary PHP polyfills depend on PHP version."
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Buggregator\\Trap\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Buggregator\\Trap\\Tests\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/trap"
+    ],
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "infection/extension-installer": true
+        },
+        "audit": {
+            "abandoned": "report"
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "cs:diff": "php-cs-fixer fix --dry-run -v --diff",
+        "cs:fix": "php-cs-fixer fix -v",
+        "infect": [
+            "@putenv XDEBUG_MODE=coverage",
+            "roave-infection-static-analysis-plugin --configuration=infection.json.dist"
+        ],
+        "infect:ci": [
+            "@putenv XDEBUG_MODE=coverage",
+            "roave-infection-static-analysis-plugin --ansi --configuration=infection.json.dist --logger-github --ignore-msi-with-no-mutations --only-covered"
+        ],
+        "psalm": "psalm",
+        "psalm:baseline": "psalm --set-baseline=psalm-baseline.xml",
+        "psalm:ci": "psalm --output-format=github --shepherd --show-info=false --stats --threads=4",
+        "refactor": "rector process --config=rector.php",
+        "refactor:ci": "rector process --config=rector.php --dry-run --ansi",
+        "test": "phpunit --color=always --testdox",
+        "test:unit": "phpunit --color=always --testsuite=Unit",
+        "test:arch": "phpunit --color=always --testsuite=Arch",
+        "test:cc": [
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit --coverage-clover=runtime/phpunit/logs/clover.xml --color=always"
+        ]
+    }
+}
