@@ -546,7 +546,7 @@ final class Authentication extends Base
             exit;
         }
 
-        wp_redirect($this->getSdk()->login(null, ['prompt' => 'login']));
+        wp_redirect($this->getSdk()->login());
         exit;
     }
 
