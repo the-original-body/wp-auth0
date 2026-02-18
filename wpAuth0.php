@@ -4,10 +4,10 @@
  * Plugin Name:       Auth0
  * Plugin URL:        https://github.com/auth0/wordpress
  * Description:       Supercharge your WordPress website with Auth0. Improve account security, add support for multifactor, enable social, passwordless and enterprise connections, and much more.
- * Version:           5.6.2
+ * Version:           5.6.3
  * Requires at least: 6.0
  * Tested up to:      6.5.3
- * Stable tag:        5.6.2
+ * Stable tag:        5.6.3
  * Requires PHP:      8.1
  * Author:            Auth0
  * Author URI:        https://auth0.com
